@@ -1,0 +1,39 @@
+html{
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+.main {
+    box-shadow: 0 .2rem .4rem 0 rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f9f9f9;
+    border-radius: 1rem;
+}
+
+.main:hover {
+    box-shadow: 0 .4rem .8rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.content {
+    padding: 1rem;
+    width: 16rem;
+    height: 16rem;
+    text-align: center;
+}
+
+.logo{
+    width: 70%;
+    height: 70%;
+}
+
+.btn{
+    text-decoration: none;
+    font-size: .8rem;
+    border: .01rem solid;
+    padding: .5rem;
+}
+.btn:hover{
+    padding: .55rem;
+}

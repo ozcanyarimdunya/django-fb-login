@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block content %}
+  <div class="content">
+    <img src="{% static 'demo/img/logo.png' %}" alt="Facebook logo" class="logo">
+    <p>Login with Facebook</p>
+    <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn">Login</a>
+  </div>
+{% endblock content %}

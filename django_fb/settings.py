@@ -1,14 +1,21 @@
 import os
+import environ
 
 from django.urls import reverse_lazy
 
+env = environ.Env(
+    DEBUG=(bool, False),
+)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = ')3@qm-js$h&03w8ucj8rqz0omd-2@7*%!6r8#tt%qo^_m*o*2u'
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-DEBUG = True
+SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = []
+DEBUG = env('DEBUG')
+
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -17,7 +24,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django.contrib.sites',
     'demo.apps.DemoConfig',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 MIDDLEWARE = [
@@ -52,10 +65,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_fb.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': env.db('DATABASE_URL')
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -90,6 +100,16 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = reverse_lazy('demo:login')
-LOGIN_REDIRECT_URL = reverse_lazy('demo:home')
+LOGIN_REDIRECT_URL = reverse_lazy('demo:index')
 LOGOUT_URL = reverse_lazy('demo:logout')
 LOGOUT_REDIRECT_URL = reverse_lazy('demo:login')
+
+SITE_ID = 1
+SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET')
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = env('SOCIAL_AUTH_REDIRECT_IS_HTTPS')
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]

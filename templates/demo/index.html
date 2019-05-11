@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <img src="{{ avatar }}" alt="User profile picture" class="logo">
+    <p>{{ name }}</p>
+    <a href="{% url 'demo:logout' %}" class="btn">Logout</a>
+  </div>
+{% endblock content %}
