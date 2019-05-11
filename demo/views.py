@@ -1,15 +1,25 @@
+from allauth.socialaccount.models import SocialAccount
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
+from django.contrib.auth import logout as django_logout
 
+
+@login_required
 def index(request):
     """Index view"""
-    ctx = {
-        "name": "Ozcan Yarimdunya",
-        "avatar": "https://avatars0.githubusercontent.com/u/12237463?s=460&v=4"
-    }
-    return render(request, 'demo/index.html', context=ctx)
+    try:
+        social = SocialAccount.objects.get(user=request.user)
+        context = {
+            "name": social.user.get_full_name(),
+            "avatar": social.get_avatar_url()
+        }
+    except (ObjectDoesNotExist, MultipleObjectsReturned):
+        context = None
+    return render(request, 'demo/index.html', context)
 
 
 def login(request):
@@ -19,9 +29,7 @@ def login(request):
 
 def logout(request):
     """Logout view"""
-    ctx = {
-        "message": "Thanks for spending time on website."
-    }
+    django_logout(request)
     return HttpResponseRedirect(reverse_lazy('demo:index'))
 
 
