@@ -1,19 +1,12 @@
 import os
-import environ
 
 from django.urls import reverse_lazy
 
-env = environ.Env(
-    DEBUG=(bool, False),
-)
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+SECRET_KEY = ")3@qm-js$h&03w8ucj8rqz0omd-2@7*%!6r8#tt%qo^_m*o*2u"
 
-SECRET_KEY = env('SECRET_KEY')
-
-DEBUG = env('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -65,7 +58,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_fb.wsgi.application'
 
 DATABASES = {
-    'default': env.db('DATABASE_URL')
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -105,9 +101,9 @@ LOGOUT_URL = reverse_lazy('demo:logout')
 LOGOUT_REDIRECT_URL = reverse_lazy('demo:login')
 
 SITE_ID = 1
-SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET')
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = env('SOCIAL_AUTH_REDIRECT_IS_HTTPS')
+SOCIAL_AUTH_FACEBOOK_KEY = "2306341332986701"
+SOCIAL_AUTH_FACEBOOK_SECRET = "dee330a34461e1e968737e1aef0fe466"
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
