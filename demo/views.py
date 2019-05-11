@@ -1,11 +1,15 @@
+import traceback
+
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
 from django.contrib.auth import logout as django_logout
+
+from demo.utils import FacebookUserIdDecoder
 
 
 @login_required
@@ -34,5 +38,18 @@ def logout(request):
 
 
 def de_authorize(request):
-    """Facebook De-authorize callback view"""
-    return render(request, 'demo/de-auth.html')
+    try:
+        decoder = FacebookUserIdDecoder(request_data=request.POST)
+        user_id = decoder.get_user_id()
+    except:
+        traceback.print_exc()
+        return HttpResponse(status=400, content='Cannot decode request')
+
+    try:
+        user = SocialAccount.objects.get(uid=user_id).user
+        user.is_active = False
+        user.save()
+    except(ObjectDoesNotExist, MultipleObjectsReturned):
+        traceback.print_exc()
+        return HttpResponse(status=400, content='User not found')
+    return HttpResponse(status=200)
