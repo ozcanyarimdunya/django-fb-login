@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 
 from django.contrib.auth import logout as django_logout
+from django.views.decorators.csrf import csrf_exempt
 
 from demo.utils import FacebookUserIdDecoder
 
@@ -37,6 +38,7 @@ def logout(request):
     return HttpResponseRedirect(reverse_lazy('demo:index'))
 
 
+@csrf_exempt
 def de_authorize(request):
     try:
         decoder = FacebookUserIdDecoder(request_data=request.POST)
